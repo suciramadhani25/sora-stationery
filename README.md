@@ -44,6 +44,6 @@ Konsep React yang digunakan: JSX, components, props, `useState`, event handling,
 ## Identitas mahasiswa
 
 Nama: Suci Ramadhani Siregar  
-NIM: **Ganti dengan NIM lengkap sebelum dikumpulkan.**
+NIM: 1247050143
 
 Identitas ditampilkan pada bagian footer aplikasi di `src/App.jsx`.
