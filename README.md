@@ -47,3 +47,16 @@ Nama: Suci Ramadhani Siregar
 NIM: 1247050143
 
 Identitas ditampilkan pada bagian footer aplikasi di `src/App.jsx`.
+
+## Teknologi yang Digunakan
+
+- React untuk membangun antarmuka aplikasi.
+- Vite sebagai development server dan build tool.
+- JavaScript untuk logika aplikasi.
+- CSS untuk mengatur tampilan dan responsivitas.
+
+## Tujuan Aplikasi
+
+Sora Stationery dibuat untuk menampilkan katalog alat tulis
+dengan tampilan sederhana dan interaktif agar pengguna
+dapat mencari serta melihat produk alat tulis dengan mudah.
