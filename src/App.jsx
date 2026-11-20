@@ -1,3 +1,4 @@
+
 import { useMemo, useState } from 'react'
 import Navbar from './components/Navbar'
 import SearchBar from './components/SearchBar'
@@ -5,7 +6,6 @@ import CategoryFilter from './components/CategoryFilter'
 import ProductList from './components/ProductList'
 import ProductDetail from './components/ProductDetail'
 import './App.css'
-
 
 const products = [
   { id: 1, name: 'Cloud Nine Notebook', category: 'Buku & Jurnal', price: 28000, icon: '📓', color: 'lavender', tag: 'Bestseller', description: 'Notebook dengan kertas tebal yang nyaman untuk mencatat materi kuliah, ide, dan rencana harian. Desain minimalis untuk menemani aktivitas belajar.' },
@@ -16,7 +16,6 @@ const products = [
   { id: 6, name: 'Wooden Pencil Duo', category: 'Pulpen & Pensil', price: 12000, icon: '✏️', color: 'blue', tag: '', description: 'Dua pensil kayu yang nyaman digenggam untuk menulis, membuat sketsa, atau mengerjakan latihan.' },
   { id: 7, name: 'Study Buddy Pouch', category: 'Perlengkapan Belajar', price: 35000, icon: '👝', color: 'lilac', tag: 'Popular', description: 'Pouch simpel untuk menyimpan alat tulis favorit agar meja dan tas tetap rapi.' },
   { id: 8, name: 'Marker Mini Set', category: 'Highlighter & Marker', price: 26000, icon: '🖌️', color: 'green', tag: '', description: 'Marker mini aneka warna untuk lettering, membuat mind map, dan mempercantik catatan.' },
-
   { id: 9, name: 'Aesthetic Binder', category: 'Buku & Jurnal', price: 38000, icon: '📔', color: 'lavender', tag: 'New', description: 'Binder aesthetic untuk menyimpan catatan kuliah, materi belajar, dan lembar tugas agar lebih rapi.' },
   { id: 10, name: 'Mechanical Pencil', category: 'Pulpen & Pensil', price: 22000, icon: '✏️', color: 'pink', tag: 'Popular', description: 'Pensil mekanik yang nyaman digunakan untuk menulis, menggambar, dan mengerjakan latihan.' },
   { id: 11, name: 'Pastel Eraser', category: 'Perlengkapan Belajar', price: 10000, icon: '🧽', color: 'mint', tag: '', description: 'Penghapus berwarna pastel untuk membantu menghapus tulisan pensil dengan praktis.' },
@@ -25,7 +24,6 @@ const products = [
   { id: 14, name: 'Cute Pencil Case', category: 'Perlengkapan Belajar', price: 42000, icon: '👝', color: 'lilac', tag: 'Bestseller', description: 'Tempat pensil praktis untuk menyimpan perlengkapan sekolah dan kuliah agar mudah dibawa.' },
   { id: 15, name: 'Soft Color Marker', category: 'Highlighter & Marker', price: 29000, icon: '🖍️', color: 'green', tag: 'New', description: 'Marker dengan pilihan warna lembut untuk mempercantik catatan, lettering, dan mind map.' },
 ]
-
 
 const formatPrice = (price) => new Intl.NumberFormat('id-ID', {
   style: 'currency',
@@ -39,13 +37,27 @@ function App() {
   const [favorites, setFavorites] = useState([])
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null)
+  const [sortOrder, setSortOrder] = useState('default')
 
   const filteredProducts = useMemo(() => products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = activeCategory === 'Semua' || product.category === activeCategory
     const matchesFavorite = !showFavoritesOnly || favorites.includes(product.id)
+
     return matchesSearch && matchesCategory && matchesFavorite
   }), [searchTerm, activeCategory, showFavoritesOnly, favorites])
+
+  const sortedProducts = useMemo(() => {
+    const result = [...filteredProducts]
+
+    if (sortOrder === 'lowest') {
+      result.sort((a, b) => a.price - b.price)
+    } else if (sortOrder === 'highest') {
+      result.sort((a, b) => b.price - a.price)
+    }
+
+    return result
+  }, [filteredProducts, sortOrder])
 
   function toggleFavorite(productId) {
     setFavorites((current) => current.includes(productId)
@@ -57,6 +69,7 @@ function App() {
     setSearchTerm('')
     setActiveCategory('Semua')
     setShowFavoritesOnly(false)
+    setSortOrder('default')
   }
 
   return (
@@ -71,11 +84,14 @@ function App() {
       <main>
         <section className="hero-section">
           <div className="hero-copy">
-            <span className="eyebrow"><span className="eyebrow-dot" /> YOUR LITTLE STUDY CORNER</span>
+            <span className="eyebrow">
+              <span className="eyebrow-dot" /> YOUR LITTLE STUDY CORNER
+            </span>
             <h1>Make every study day<br /><span>a little more lovely.</span></h1>
             <p>Temukan teman belajar yang bikin kamu makin semangat menuangkan ide dan meraih mimpi.</p>
             <a className="hero-link" href="#catalog">Explore collection <span>↗</span></a>
           </div>
+
           <div className="hero-art" aria-label="Ilustrasi perlengkapan alat tulis">
             <div className="art-spark spark-one">✳</div>
             <div className="art-spark spark-two">✦</div>
@@ -89,7 +105,10 @@ function App() {
             <div className="art-flower">🌼</div>
             <div className="art-note">good things<br />take time ♡</div>
           </div>
-          <div className="hero-bottom-note"><span>✳</span> Everything you need for your study</div>
+
+          <div className="hero-bottom-note">
+            <span>✳</span> Everything you need for your study
+          </div>
         </section>
 
         <section className="catalog-section" id="catalog">
@@ -99,23 +118,43 @@ function App() {
               <h2>Find your study essentials<span>.</span></h2>
               <p>Small things, big inspiration.</p>
             </div>
-            <div className="result-count"><strong>{filteredProducts.length.toString().padStart(2, '0')}</strong><span> items<br />to explore</span></div>
+            <div className="result-count">
+              <strong>{sortedProducts.length.toString().padStart(2, '0')}</strong>
+              <span> items<br />to explore</span>
+            </div>
           </div>
 
           <div className="catalog-tools">
             <SearchBar value={searchTerm} onChange={setSearchTerm} />
-            <CategoryFilter activeCategory={activeCategory} onChange={setActiveCategory} />
+
+            <CategoryFilter
+              activeCategory={activeCategory}
+              onChange={setActiveCategory}
+            />
+
+            <select
+              className="sort-select"
+              value={sortOrder}
+              onChange={(event) => setSortOrder(event.target.value)}
+              aria-label="Urutkan produk berdasarkan harga"
+            >
+              <option value="default">Urutan Default</option>
+              <option value="lowest">Harga Termurah</option>
+              <option value="highest">Harga Termahal</option>
+            </select>
           </div>
 
           {showFavoritesOnly && (
             <div className="favorites-notice">
               <span>♡</span> Showing your favorite picks
-              <button onClick={() => setShowFavoritesOnly(false)}>Show all products</button>
+              <button onClick={() => setShowFavoritesOnly(false)}>
+                Show all products
+              </button>
             </div>
           )}
 
           <ProductList
-            products={filteredProducts}
+            products={sortedProducts}
             favorites={favorites}
             onToggleFavorite={toggleFavorite}
             onViewDetails={setSelectedProduct}
@@ -132,9 +171,20 @@ function App() {
       </main>
 
       <footer className="site-footer" id="footer">
-        <div className="footer-brand"><span className="brand-mark">s.</span><div><strong>sora stationery</strong><small>Everything You Need for Your Study</small></div></div>
+        <div className="footer-brand">
+          <span className="brand-mark">s.</span>
+          <div>
+            <strong>sora stationery</strong>
+            <small>Everything You Need for Your Study</small>
+          </div>
+        </div>
+
         <p>Made for curious minds & creative days.</p>
-        <div className="student-info"><strong>Suci Ramadhani Siregar</strong><span>NIM:1247050143</span></div>
+
+        <div className="student-info">
+          <strong>Suci Ramadhani Siregar</strong>
+          <span>NIM: 1247050143</span>
+        </div>
       </footer>
 
       {selectedProduct && (
