@@ -60,3 +60,16 @@ Identitas ditampilkan pada bagian footer aplikasi di `src/App.jsx`.
 Sora Stationery dibuat untuk menampilkan katalog alat tulis
 dengan tampilan sederhana dan interaktif agar pengguna
 dapat mencari serta melihat produk alat tulis dengan mudah.
+
+
+## Fitur Pengurutan Produk
+
+Aplikasi Sora Stationery menyediakan fitur pengurutan produk berdasarkan harga.
+
+Pengguna dapat memilih tiga pilihan:
+- Urutan Default: menampilkan produk sesuai urutan awal.
+- Harga Termurah: mengurutkan produk dari harga terendah ke tertinggi.
+- Harga Termahal: mengurutkan produk dari harga tertinggi ke terendah.
+
+Fitur ini dibuat menggunakan React useState dan useMemo agar urutan produk dapat berubah secara interaktif.
+
